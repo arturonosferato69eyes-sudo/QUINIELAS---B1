@@ -26,10 +26,10 @@ a{color:#1877f2;text-decoration:none;font-weight:bold;font-size:20px}
 <div class="card">
 <h1>QUINIELAS BAJÍO</h1>
 <h2 id="titulo">QUINIELA BAJÍO - J17</h2>
-<div class="precio">PRECIO: $10.00</div>
+<div class="precio">PRECIO: $15.00</div>
 <div class="precio">INFORMES: +52 477 631 5296</div>
 <div style="margin:10px 0"><a href="https://www.facebook.com/share/1a2b3c4d5e/" target="_blank">📘 Quinielas Bajío en Facebook</a></div>
-<div class="precio">TOTAL: $10.00</div>
+<div class="precio">TOTAL: $15.00</div>
 <div id="contenido"></div>
 <input id="nombre" placeholder="NOMBRE DEL PARTICIPANTE">
 <div style="display:flex;gap:10px;justify-content:center;margin-top:10px">
@@ -56,7 +56,7 @@ if(!nombre){alert("Pon tu nombre"); return;}
 if(sel.includes("")){alert("Te faltan partidos por elegir"); return;}
 let texto=`*QUINIELA BAJÍO - J17*%0A*Nombre:* ${nombre}%0A%0A`;
 juegos.forEach((j,i)=>{texto+=`${j[0]} vs ${j[1]}: ${sel[i]}%0A`;});
-texto+=`%0A*Total: $10.00*`;
+texto+=`%0A*Total: $15.00*`;
 window.open(`https://wa.me/524776315296?text=${texto}`);
 }
 </script>
