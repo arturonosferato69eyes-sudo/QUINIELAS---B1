@@ -1,68 +1,64 @@
-qwidth:480px;margin:auto;padding:20px;border-radius:15px;text-align:center}
-h1{font-size:28px;margin:5px 0} h2{font-size:22px;margin:5px 0 15px}
-.match{display:flex;justify-content:space-between;align-items:center;border:1px solid #ddd;border-radius:10px;padding:10px;margin:8px 0}
-.match span{font-size:14px;font-weight:bold;width:32%}
-.btns{display:flex;gap:5px}
-.btns button{width:36px;height:36px;font-weight:bold;border:1px solid #ccc;background:white;border-radius:6px}
-.btns button.active{background:black;color:white}
-input{width:95%;padding:12px;margin:10px 0;border:1px solid #ccc;border-radius:8px;font-size:16px;text-align:center}
-.limpiar{background:#d9534f;color:white;border:0;padding:10px 18px;border-radius:8px;font-weight:bold}
-.aleatorio{background:#5bc0de;color:white;border:0;padding:10px 18px;border-radius:8px;font-weight:bold}
-.enviar{background:#25D366;color:white;border:0;width:100%;padding:15px;border-radius:10px;font-size:19px;font-weight:bold;margin-top:12px}
-a{color:#1877F2;font-weight:bold;text-decoration:none}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QUINIELAS BAJÍO</title>
+<style>
+body{font-family:Arial,sans-serif;background:#f2f2f2;margin:0;padding:10px}
+.card{background:#fff;max-width:480px;margin:auto;padding:20px;border-radius:12px;text-align:center}
+h1{margin:0;font-size:28px}
+h2{margin:5px 0 15px;font-size:22px}
+.precio{font-size:22px;font-weight:bold;margin:5px 0}
+.partido{display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #eee;padding:10px 0;font-weight:bold;font-size:14px}
+.partido span{flex:1}
+.partido span:last-child{text-align:right}
+.btns{display:flex;gap:5px;justify-content:center;margin:5px}
+.btns button{border:none;padding:10px 14px;color:#fff;font-weight:bold;font-size:16px;border-radius:5px;cursor:pointer}
+.btns button.sel{background:#000 !important}
+input{width:100%;padding:12px;border:1px solid #ccc;border-radius:8px;text-align:center;font-size:16px;box-sizing:border-box;margin-top:10px}
+.limpiar{background:#e74c3c}.aleatorio{background:#5bc0de}
+.whatsapp{background:#25D366;width:100%;padding:15px;border:none;color:#fff;font-size:19px;font-weight:bold;border-radius:8px;margin-top:10px}
+a{color:#1877f2;text-decoration:none;font-weight:bold;font-size:20px}
 </style>
 </head>
 <body>
 <div class="card">
 <h1>QUINIELAS BAJÍO</h1>
-<h2 id="titulo">CARGANDO PARTIDOS...</h2>
-<div id="partidos">Espere...</div>
-<p><b>PRECIO: $10.00</b></p>
-<p><b>INFORMES: +52 477 631 5296</b></p>
-<p><a href="https://www.facebook.com/quinielasbajio" target="_blank">📘 Quinielas Bajío en Facebook</a></p>
-<p><b>TOTAL: $10.00</b></p>
+<h2 id="titulo">QUINIELA BAJÍO - J17</h2>
+<div class="precio">PRECIO: $10.00</div>
+<div class="precio">INFORMES: +52 477 631 5296</div>
+<div style="margin:10px 0"><a href="https://www.facebook.com/share/1a2b3c4d5e/" target="_blank">📘 Quinielas Bajío en Facebook</a></div>
+<div class="precio">TOTAL: $10.00</div>
+<div id="contenido"></div>
 <input id="nombre" placeholder="NOMBRE DEL PARTICIPANTE">
-<br>
-<button class="limpiar" onclick="limpiar()">Limpiar</button>
-<button class="aleatorio" onclick="aleatorio()">Aleatorio</button>
-<button class="enviar" onclick="enviar()">Enviar por 💬 WhatsApp</button>
+<div style="display:flex;gap:10px;justify-content:center;margin-top:10px">
+<button class="limpiar" style="border:none;padding:10px 18px;color:#fff;font-weight:bold;border-radius:5px" onclick="limpiar()">Limpiar</button>
+<button class="aleatorio" style="border:none;padding:10px 18px;color:#fff;font-weight:bold;border-radius:5px" onclick="aleatorio()">Aleatorio</button>
+</div>
+<button class="whatsapp" onclick="enviar()">Enviar por 💬 WhatsApp</button>
 </div>
 <script>
-let juegos=[]; let sel=[];
-const SHEET_URL="https://docs.google.com/spreadsheets/d/12XOx1sjcPFY6Nn42xO_XLpSmu0fZpSJWnIZoPlFxGWM/export?format=csv&gid=0";
-async function cargar(){
-  try{
-    let r=await fetch(SHEET_URL);
-    let t=await r.text();
-    let lineas=t.trim().split("\n");
-    juegos=[];
-    for(let i=1;i<lineas.length;i++){
-      let p=lineas[i].split(",");
-      if(p[0] && p[1]) juegos.push([p[0].trim(),p[1].trim()]);
-    }
-  }catch(e){}
-  if(juegos.length==0){ juegos=[["PUEBLA","ATL. SAN LUIS"],["JUÁREZ","ATLAS"],["TIJUANA","ATLANTE"],["SANTOS","LEÓN"],["PACHUCA","TOLUCA"],["PUMAS","MONTERREY"],["TIGRES","AMÉRICA"],["GUADALAJARA","CRUZ AZUL"],["QUERÉTARO","NECAXA"]]; }
-  sel=Array(juegos.length).fill("");
-  document.getElementById("titulo").innerText="J17 - APERTURA 2026";
-  const cont=document.getElementById("partidos"); cont.innerHTML="";
-  juegos.forEach((j,i)=>{
-    let div=document.createElement("div"); div.className="match";
-    div.innerHTML=`<span>${j[0]}</span><div class="btns"><button onclick="elegir(${i},'L',this)">L</button><button onclick="elegir(${i},'E',this)">E</button><button onclick="elegir(${i},'V',this)">V</button></div><span>${j[1]}</span>`;
-    cont.appendChild(div)});
-
-function elegir(i,v,btn){ sel[i]=v; btn.parentElement.querySelectorAll("button").forEach(b=>b.classList.remove("active")); btn.classList.add("active"); }
-function limpiar(){ sel=Array(juegos.length).fill(""); document.querySelectorAll(".btns button").forEach(b=>b.classList.remove("active")); }
-function aleatorio(){ const ops=["L","E","V"]; document.querySelectorAll(".match").forEach((m,i)=>{ let v=ops[Math.floor(Math.random()*3)]; sel[i]=v; m.querySelectorAll("button").forEach(b=>{ b.classList.toggle("active", b.textContent==v) }); }); }
+let juegos=[["PUEBLA","ATL. SAN LUIS"],["JUÁREZ","ATLAS"],["TIJUANA","ATLANTE"],["SANTOS","LEÓN"],["PACHUCA","TOLUCA"],["PUMAS","MONTERREY"],["TIGRES","AMÉRICA"],["GUADALAJARA","CRUZ AZUL"],["QUERÉTARO","NECAXA"]];
+let sel=Array(juegos.length).fill("");
+const cont=document.getElementById("contenido");
+juegos.forEach((j,i)=>{
+let div=document.createElement("div"); div.className="partido";
+div.innerHTML=`<span>${j[0]}</span><div class="btns" id="b${i}"><button onclick="elegir(${i},'L',this)">L</button><button onclick="elegir(${i},'E',this)">E</button><button onclick="elegir(${i},'V',this)">V</button></div><span>${j[1]}</span>`;
+cont.appendChild(div);
+});
+function elegir(i,v,boton){sel[i]=v; document.querySelectorAll("#b"+i+" button").forEach(b=>b.classList.remove("sel")); boton.classList.add("sel");}
+function limpiar(){sel=Array(juegos.length).fill(""); document.querySelectorAll(".btns button").forEach(b=>b.classList.remove("sel"));}
+function aleatorio(){const ops=["L","E","V"]; juegos.forEach((j,i)=>{let v=ops[Math.floor(Math.random()*3)]; sel[i]=v; let btns=document.querySelectorAll("#b"+i+" button"); btns.forEach(b=>b.classList.remove("sel")); btns[ops.indexOf(v)].classList.add("sel");});}
 function enviar(){
-  let nombre=document.getElementById("nombre").value.trim();
-  if(!nombre){ alert("Pon tu nombre"); return; }
-  if(sel.includes("")){ alert("Te faltan partidos por escoger"); return; }
-  let texto=`*QUINIELA BAJÍO - J17*%0A*Nombre:* ${nombre}%0A%0A`;
-  juegos.forEach((j,i)=>{ texto+=`${j[0]} vs ${j[1]}: *${sel[i]}*%0A`; });
-  texto+=`%0A*Total: $10.00*`;
-  window.open(`https://wa.me/524776315296?text=${texto}`,"_blank");
+let nombre=document.getElementById("nombre").value.trim();
+if(!nombre){alert("Pon tu nombre"); return;}
+if(sel.includes("")){alert("Te faltan partidos por elegir"); return;}
+let texto=`*QUINIELA BAJÍO - J17*%0A*Nombre:* ${nombre}%0A%0A`;
+juegos.forEach((j,i)=>{texto+=`${j[0]} vs ${j[1]}: ${sel[i]}%0A`;});
+texto+=`%0A*Total: $10.00*`;
+window.open(`https://wa.me/524776315296?text=${texto}`);
 }
-cargar();
 </script>
 </body>
 </html>
