@@ -56,8 +56,16 @@ async function cargar(){
   juegos.forEach((j,i)=>{
     let div=document.createElement("div"); div.className="match";
     div.innerHTML=`<span>${j[0]}</span><div class="btns"><button onclick="elegir(${i},'L',this)">L</button><button onclick="elegir(${i},'E',this)">E</button><button onclick="elegir(${i},'V',this)">V</button></div><span>${j[1]}</span>`;
-    cont.appendChild(div);
-  });
+    cont.appendChild(div)});
+{ local: "PUEBLA", visita: "SAN LUIS" },
+{ local: "JUAREZ", visita: "ATLAS" },
+{ local: "TIJUANA", visita: "ATLANTE" },
+{ local: "SANTOS", visita: "LEON" },
+{ local: "PACHUCA", visita: "TOLUCA" },
+{ local: "PUMAS", visita: "MONTERREY" },
+{ local: "TIGRES", visita: "AMERICA" },
+{ local: "CHIVAS", visita: "CRUZ AZUL" },
+{ local: "QUERETARO", visita: "NECAXA" },
 }
 function elegir(i,v,btn){ sel[i]=v; btn.parentElement.querySelectorAll("button").forEach(b=>b.classList.remove("active")); btn.classList.add("active"); }
 function limpiar(){ sel=Array(juegos.length).fill(""); document.querySelectorAll(".btns button").forEach(b=>b.classList.remove("active")); }
