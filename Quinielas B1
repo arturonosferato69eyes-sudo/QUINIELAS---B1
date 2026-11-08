@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>QUINIELAS BAJÍO - J17</title>
+<title>QUINIELAS BAJÍO</title>
 <style>
 body{font-family:Arial,sans-serif;background:#f2f2f2;margin:0;padding:10px}
 .card{background:white;max-width:480px;margin:auto;padding:20px;border-radius:15px;text-align:center}
@@ -23,10 +23,9 @@ a{color:#1877F2;font-weight:bold;text-decoration:none}
 <body>
 <div class="card">
 <h1>QUINIELAS BAJÍO</h1>
-<h2>J17 - APERTURA 2026</h2>
-<div id="partidos"></div>
+<h2 id="titulo">CARGANDO PARTIDOS...</h2>
+<div id="partidos">Espere...</div>
 <p><b>PRECIO: $10.00</b></p>
-<p><b>CIERRE: VIERNES 20 NOV - 6:30 P.M.</b></p>
 <p><b>INFORMES: +52 477 631 5296</b></p>
 <p><a href="https://www.facebook.com/quinielasbajio" target="_blank">📘 Quinielas Bajío en Facebook</a></p>
 <p><b>TOTAL: $10.00</b></p>
@@ -37,40 +36,32 @@ a{color:#1877F2;font-weight:bold;text-decoration:none}
 <button class="enviar" onclick="enviar()">Enviar por 💬 WhatsApp</button>
 </div>
 <script>
-const juegos=[
-["PUEBLA","ATL. SAN LUIS"],
-["JUÁREZ","ATLAS"],
-["TIJUANA","ATLANTE"],
-["SANTOS","LEÓN"],
-["PACHUCA","TOLUCA"],
-["PUMAS","MONTERREY"],
-["TIGRES","AMÉRICA"],
-["GUADALAJARA","CRUZ AZUL"],
-["QUERÉTARO","NECAXA"]
-];
-let sel=Array(9).fill("");
-const cont=document.getElementById("partidos");
-juegos.forEach((j,i)=>{
-  let div=document.createElement("div"); div.className="match";
-  div.innerHTML=`<span>${j[0]}</span><div class="btns">
-  <button onclick="elegir(${i},'L',this)">L</button>
-  <button onclick="elegir(${i},'E',this)">E</button>
-  <button onclick="elegir(${i},'V',this)">V</button></div><span>${j[1]}</span>`;
-  cont.appendChild(div);
-});
-function elegir(i,v,btn){
-  sel[i]=v;
-  btn.parentElement.querySelectorAll("button").forEach(b=>b.classList.remove("active"));
-  btn.classList.add("active");
-}
-function limpiar(){ sel=Array(9).fill(""); document.querySelectorAll(".btns button").forEach(b=>b.classList.remove("active")); }
-function aleatorio(){
-  const ops=["L","E","V"];
-  document.querySelectorAll(".match").forEach((m,i)=>{
-    let v=ops[Math.floor(Math.random()*3)]; sel[i]=v;
-    m.querySelectorAll("button").forEach(b=>{ b.classList.toggle("active", b.textContent==v) });
+let juegos=[]; let sel=[];
+const SHEET_URL="https://docs.google.com/spreadsheets/d/12XOx1sjcPFY6Nn42xO_XLpSmu0fZpSJWnIZoPlFxGWM/export?format=csv&gid=0";
+async function cargar(){
+  try{
+    let r=await fetch(SHEET_URL);
+    let t=await r.text();
+    let lineas=t.trim().split("\n");
+    juegos=[];
+    for(let i=1;i<lineas.length;i++){
+      let p=lineas[i].split(",");
+      if(p[0] && p[1]) juegos.push([p[0].trim(),p[1].trim()]);
+    }
+  }catch(e){}
+  if(juegos.length==0){ juegos=[["PUEBLA","ATL. SAN LUIS"],["JUÁREZ","ATLAS"],["TIJUANA","ATLANTE"],["SANTOS","LEÓN"],["PACHUCA","TOLUCA"],["PUMAS","MONTERREY"],["TIGRES","AMÉRICA"],["GUADALAJARA","CRUZ AZUL"],["QUERÉTARO","NECAXA"]]; }
+  sel=Array(juegos.length).fill("");
+  document.getElementById("titulo").innerText="J17 - APERTURA 2026";
+  const cont=document.getElementById("partidos"); cont.innerHTML="";
+  juegos.forEach((j,i)=>{
+    let div=document.createElement("div"); div.className="match";
+    div.innerHTML=`<span>${j[0]}</span><div class="btns"><button onclick="elegir(${i},'L',this)">L</button><button onclick="elegir(${i},'E',this)">E</button><button onclick="elegir(${i},'V',this)">V</button></div><span>${j[1]}</span>`;
+    cont.appendChild(div);
   });
 }
+function elegir(i,v,btn){ sel[i]=v; btn.parentElement.querySelectorAll("button").forEach(b=>b.classList.remove("active")); btn.classList.add("active"); }
+function limpiar(){ sel=Array(juegos.length).fill(""); document.querySelectorAll(".btns button").forEach(b=>b.classList.remove("active")); }
+function aleatorio(){ const ops=["L","E","V"]; document.querySelectorAll(".match").forEach((m,i)=>{ let v=ops[Math.floor(Math.random()*3)]; sel[i]=v; m.querySelectorAll("button").forEach(b=>{ b.classList.toggle("active", b.textContent==v) }); }); }
 function enviar(){
   let nombre=document.getElementById("nombre").value.trim();
   if(!nombre){ alert("Pon tu nombre"); return; }
@@ -80,6 +71,7 @@ function enviar(){
   texto+=`%0A*Total: $10.00*`;
   window.open(`https://wa.me/524776315296?text=${texto}`,"_blank");
 }
+cargar();
 </script>
 </body>
 </html>
