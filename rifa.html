@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RIFA BAJÍO - 3 CIFRAS</title>
+<style>
+body{font-family:Arial,sans-serif;background:#0a0f1e;margin:0;padding:10px}
+.card{background:#fff;max-width:500px;margin:auto;padding:20px;border-radius:16px;text-align:center}
+h1{margin:0;font-size:26px} h2{margin:5px 0;color:#c27a1a}
+.barra{background:#eee;height:22px;border-radius:20px;overflow:hidden;margin:10px 0}
+.progreso{background:#25D366;height:100%;width:0%;text-align:center;color:#fff;font-weight:bold;font-size:13px;line-height:22px}
+.numero{display:inline-block;width:80px;padding:14px 0;margin:6px;border:2px solid #ddd;border-radius:10px;font-size:22px;font-weight:bold;cursor:pointer}
+.numero.sel{background:#000;color:#ffcc00;border-color:#000}
+button{border:none;padding:14px;border-radius:10px;font-weight:bold;font-size:16px;cursor:pointer}
+.btn-azul{background:#1877f2;color:#fff;width:100%}
+.btn-verde{background:#25D366;color:#fff;width:100%;margin-top:10px;font-size:18px}
+input{width:100%;padding:12px;border:1px solid #ccc;border-radius:8px;text-align:center;font-size:16px;box-sizing:border-box;margin-top:10px}
+</style>
+</head>
+<body>
+<div class="card">
+<h1>🎰 RIFA BAJÍO</h1>
+<h2>3 CIFRAS - SOLO AL AZAR</h2>
+<p><b>PRECIO: $15 POR NÚMERO</b><br>INFORMES: +52 477 631 5296</p>
+<div style="font-weight:bold" id="textoProgreso">Cargando...</div>
+<div class="barra"><div class="progreso" id="barra">0%</div></div>
+<p style="font-size:13px">⚠️ La rifa se hace al vender el 75% = 750 números</p>
+<button class="btn-azul" onclick="dar5()">🎲 DAME 5 NÚMEROS AL AZAR</button>
+<p style="font-size:13px">Te salen 5, escoges los que quieras. Si quieres más, aprieta otra vez y te salen otros 5 sin repetir.</p>
+<div id="opciones"></div>
+<input id="nombre" placeholder="TU NOMBRE COMPLETO">
+<button class="btn-verde" onclick="enviar()">📲 APARTAR MIS NÚMEROS POR WHATSAPP</button>
+<p style="font-size:12px;color:#888">Al enviar, tus números quedan apartados. Tienes 2 horas para pagar.</p>
+</div>
+<script>
+let vendidos = [];
+let todos = [];
+for(let i=0;i<1000;i++){ todos.push(String(i).padStart(3,"0")); }
+let yaMostrados = [];
+let seleccionados = [];
+let disponibles = todos.filter(n => !vendidos.includes(n));
+function actualizarProgreso(){
+  let vend = vendidos.length;
+  let porc = Math.round(vend/1000*100);
+  document.getElementById("barra").style.width = porc+"%";
+  document.getElementById("barra").innerText = porc+"%";
+  document.getElementById("textoProgreso").innerText = `Vendidos: ${vend} de 1000 | Quedan: ${1000-vend} | Faltan ${Math.max(0,750-vend)} para el 75%`;
+}
+function dar5(){
+  let div = document.getElementById("opciones");
+  div.innerHTML = "";
+  let pool = disponibles.filter(n => !yaMostrados.includes(n) && !seleccionados.includes(n));
+  if(pool.length < 5){ alert("Ya casi se acaban!"); return; }
+  for(let k=0;k<5;k++){
+    let idx = Math.floor(Math.random()*pool.length);
+    let num = pool.splice(idx,1)[0];
+    yaMostrados.push(num);
+    let span = document.createElement("div");
+    span.className="numero"; span.innerText=num;
+    span.onclick = ()=>{
+      if(seleccionados.includes(num)){
+        seleccionados = seleccionados.filter(x=>x!==num);
+        span.classList.remove("sel");
+      } else {
+        seleccionados.push(num);
+        span.classList.add("sel");
+      }
+    };
+    div.appendChild(span);
+  }
+}
+function enviar(){
+  let nombre = document.getElementById("nombre").value.trim();
+  if(!nombre){ alert("Pon tu nombre"); return; }
+  if(seleccionados.length==0){ alert("Primero aprieta el botón y escoge tus números"); return; }
+  let texto = `*RIFA BAJÍO 3 CIFRAS*%0A*Nombre:* ${nombre}%0A*Números que quiero:* ${seleccionados.join(", ")}%0A*Total:* $${seleccionados.length*15}%0A%0AQuiero apartarlos, ¿me confirmas?`;
+  window.open(`https://wa.me/524776315296?text=${texto}`);
+}
+actualizarProgreso();
+</script>
+</body>
+</html>
