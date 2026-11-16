@@ -4,7 +4,109 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>QUINIELAS BAJÍO</title>
+/* DISEÑO COMPACTO PARA CELULARES */
+@media(max-width:600px){
 
+body{
+ padding:5px;
+}
+
+.contenedor{
+ max-width:100%;
+}
+
+.encabezado{
+ padding:9px 5px;
+ margin-bottom:6px;
+ border-radius:10px;
+}
+
+.encabezado h1{
+ font-size:19px;
+}
+
+.encabezado p{
+ font-size:10px;
+}
+
+.encabezado h3{
+ font-size:13px;
+ margin:5px 0 0;
+}
+
+.tarjeta{
+ padding:8px;
+ margin-bottom:7px;
+ border-radius:10px;
+}
+
+.tarjeta h3{
+ font-size:13px;
+ margin:3px 0 6px;
+}
+
+.tarjeta p{
+ font-size:10px;
+ margin:5px 0;
+}
+
+input{
+ padding:7px;
+ font-size:13px;
+ margin-top:3px;
+}
+
+.precio{
+ font-size:15px;
+}
+
+#partidos{
+ display:grid;
+ grid-template-columns:repeat(3,minmax(0,1fr));
+ gap:5px;
+}
+
+.partido{
+ padding:5px 3px;
+ margin:0;
+ border-radius:7px;
+ min-width:0;
+}
+
+.numero{
+ font-size:9px;
+}
+
+.equipos{
+ font-size:9px;
+ margin:6px 0;
+ line-height:1.2;
+ overflow-wrap:anywhere;
+}
+
+.opciones{
+ gap:2px;
+}
+
+.opciones button{
+ padding:6px 1px;
+ font-size:12px;
+ border-radius:5px;
+ min-width:0;
+}
+
+.boton{
+ padding:9px 4px;
+ margin-top:5px;
+ font-size:12px;
+}
+
+.pie{
+ padding:5px;
+ font-size:9px;
+}
+
+}
 <style>
 *{box-sizing:border-box}
 body{
