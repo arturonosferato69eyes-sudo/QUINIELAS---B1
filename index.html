@@ -1,64 +1,237 @@
-DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>QUINIELAS BAJÍO</title>
+
 <style>
-body{font-family:Arial,sans-serif;background:#f2f2f2;margin:0;padding:10px}
-.card{background:#fff;max-width:480px;margin:auto;padding:20px;border-radius:12px;text-align:center}
-h1{margin:0;font-size:28px}
-h2{margin:5px 0 15px;font-size:22px}
-.precio{font-size:22px;font-weight:bold;margin:5px 0}
-.partido{display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #eee;padding:10px 0;font-weight:bold;font-size:14px}
-.partido span{flex:1}
-.partido span:last-child{text-align:right}
-.btns{display:flex;gap:5px;justify-content:center;margin:5px}
-.btns button{border:none;padding:10px 14px;color:#fff;font-weight:bold;font-size:16px;border-radius:5px;cursor:pointer}
-.btns button.sel{background:#000 !important}
-input{width:100%;padding:12px;border:1px solid #ccc;border-radius:8px;text-align:center;font-size:16px;box-sizing:border-box;margin-top:10px}
-.limpiar{background:#e74c3c}.aleatorio{background:#5bc0de}
-.whatsapp{background:#25D366;width:100%;padding:15px;border:none;color:#fff;font-size:19px;font-weight:bold;border-radius:8px;margin-top:10px}
-a{color:#1877f2;text-decoration:none;font-weight:bold;font-size:20px}
+*{box-sizing:border-box}
+body{
+ margin:0;padding:15px;
+ font-family:Arial,sans-serif;
+ background:linear-gradient(135deg,#071b32,#145044);
+ color:white
+}
+.contenedor{max-width:520px;margin:auto}
+.encabezado{
+ text-align:center;padding:24px 12px;
+ background:linear-gradient(135deg,#087f5b,#13a66b);
+ border-radius:18px;margin-bottom:15px
+}
+.encabezado h1{margin:0;font-size:28px}
+.encabezado p{margin-bottom:0}
+.tarjeta{
+ background:white;color:#172b3a;
+ padding:17px;border-radius:16px;margin-bottom:15px
+}
+input{
+ width:100%;padding:14px;
+ border:2px solid #dce5ec;border-radius:10px;
+ font-size:17px;margin-top:8px
+}
+.precio{
+ text-align:center;font-size:23px;
+ font-weight:bold;color:#087f5b
+}
+.partido{
+ background:#f1f5f9;padding:14px;
+ border-radius:12px;margin-bottom:12px
+}
+.numero{color:#087f5b;font-weight:bold}
+.equipos{
+ text-align:center;font-weight:bold;
+ font-size:16px;margin:12px 0
+}
+.opciones{display:flex;gap:10px}
+.opciones button{
+ flex:1;padding:13px 5px;
+ border:2px solid #d6dee5;border-radius:10px;
+ background:white;font-size:19px;font-weight:bold
+}
+.opciones button.seleccionado.local{
+ background:#f4c542;border-color:#d49b00
+}
+.opciones button.seleccionado.empate{
+ background:#aeb8c2;border-color:#778491
+}
+.opciones button.seleccionado.visitante{
+ background:#36b878;border-color:#16864e
+}
+.progreso{
+ height:12px;background:#dce5ec;
+ border-radius:20px;overflow:hidden;margin-top:12px
+}
+.barra{
+ height:100%;width:0%;background:#13a66b;
+ transition:.3s
+}
+.boton{
+ width:100%;border:none;border-radius:12px;
+ padding:16px;margin-top:10px;
+ font-size:17px;font-weight:bold
+}
+.enviar{background:#20bd65;color:white}
+.limpiar{background:#e8edf2;color:#172b3a}
+.aleatorio{background:#f4c542;color:#172b3a}
+.pie{text-align:center;font-size:12px;padding:15px}
 </style>
 </head>
+
 <body>
-<div class="card">
-<h1>QUINIELAS BAJÍO</h1>
-<h2 id="titulo">QUINIELA BAJÍO - J17</h2>
-<div class="precio">PRECIO: $15.00</div>
-<div class="precio">INFORMES: +52 477 631 5296</div>
-<div style="margin:10px 0"><a href="https://www.facebook.com/share/1a2b3c4d5e/" target="_blank">📘 Quinielas Bajío en Facebook</a></div>
-<div class="precio">TOTAL: $15.00</div>
-<div id="contenido"></div>
-<input id="nombre" placeholder="NOMBRE DEL PARTICIPANTE">
-<div style="display:flex;gap:10px;justify-content:center;margin-top:10px">
-<button class="limpiar" style="border:none;padding:10px 18px;color:#fff;font-weight:bold;border-radius:5px" onclick="limpiar()">Limpiar</button>
-<button class="aleatorio" style="border:none;padding:10px 18px;color:#fff;font-weight:bold;border-radius:5px" onclick="aleatorio()">Aleatorio</button>
+<div class="contenedor">
+
+<div class="encabezado">
+<h1>⚽ QUINIELAS BAJÍO</h1>
+<p>¡Demuestra que sabes de fútbol!</p>
+<h3>JORNADA 17</h3>
 </div>
-<button class="whatsapp" onclick="enviar()">Enviar por 💬 WhatsApp</button>
+
+<div class="tarjeta">
+<label><b>Nombre del participante:</b></label>
+<input id="nombre" type="text" placeholder="Escribe tu nombre">
+
+<p class="precio">🎟️ BOLETO $15 PESOS</p>
+
+<b>Pronósticos seleccionados:</b>
+<div class="progreso">
+<div class="barra" id="barra"></div>
 </div>
+<p id="contador">0 de 9 partidos seleccionados</p>
+</div>
+
+<div class="tarjeta">
+<h3>🏆 SELECCIONA TUS RESULTADOS</h3>
+<p>🏆 Local | 🤝 Empate | ⚽ Visitante</p>
+<div id="partidos"></div>
+
+<button class="boton aleatorio" onclick="aleatorio()">
+🎲 LLENAR ALEATORIAMENTE
+</button>
+
+<button class="boton limpiar" onclick="limpiar()">
+🧹 LIMPIAR QUINIELA
+</button>
+
+<button class="boton enviar" onclick="enviarWhatsApp()">
+📲 ENVIAR QUINIELA POR WHATSAPP
+</button>
+</div>
+
+<div class="pie">
+QUINIELAS BAJÍO © 2026
+</div>
+</div>
+
 <script>
-let juegos=[["PUEBLA","ATL. SAN LUIS"],["JUÁREZ","ATLAS"],["TIJUANA","ATLANTE"],["SANTOS","LEÓN"],["PACHUCA","TOLUCA"],["PUMAS","MONTERREY"],["TIGRES","AMÉRICA"],["GUADALAJARA","CRUZ AZUL"],["QUERÉTARO","NECAXA"]];
-let sel=Array(juegos.length).fill("");
-const cont=document.getElementById("contenido");
-juegos.forEach((j,i)=>{
-let div=document.createElement("div"); div.className="partido";
-div.innerHTML=`<span>${j[0]}</span><div class="btns" id="b${i}"><button onclick="elegir(${i},'L',this)">L</button><button onclick="elegir(${i},'E',this)">E</button><button onclick="elegir(${i},'V',this)">V</button></div><span>${j[1]}</span>`;
-cont.appendChild(div);
-});
-function elegir(i,v,boton){sel[i]=v; document.querySelectorAll("#b"+i+" button").forEach(b=>b.classList.remove("sel")); boton.classList.add("sel");}
-function limpiar(){sel=Array(juegos.length).fill(""); document.querySelectorAll(".btns button").forEach(b=>b.classList.remove("sel"));}
-function aleatorio(){const ops=["L","E","V"]; juegos.forEach((j,i)=>{let v=ops[Math.floor(Math.random()*3)]; sel[i]=v; let btns=document.querySelectorAll("#b"+i+" button"); btns.forEach(b=>b.classList.remove("sel")); btns[ops.indexOf(v)].classList.add("sel");});}
-function enviar(){
-let nombre=document.getElementById("nombre").value.trim();
-if(!nombre){alert("Pon tu nombre"); return;}
-if(sel.includes("")){alert("Te faltan partidos por elegir"); return;}
-let texto=`*QUINIELA BAJÍO - J17*%0A*Nombre:* ${nombre}%0A%0A`;
-juegos.forEach((j,i)=>{texto+=`${j[0]} vs ${j[1]}: ${sel[i]}%0A`;});
-texto+=`%0A*Total: $15.00*`;
-window.open(`https://wa.me/524776315296?text=${texto}`);
+const telefono="524776315296";
+
+const encuentros=[
+["PUEBLA","ATL. SAN LUIS"],
+["JUÁREZ","ATLAS"],
+["TIJUANA","ATLANTE"],
+["SANTOS","LEÓN"],
+["PACHUCA","TOLUCA"],
+["PUMAS","MONTERREY"],
+["TIGRES","AMÉRICA"],
+["GUADALAJARA","CRUZ AZUL"],
+["QUERÉTARO","NECAXA"]
+];
+
+const simbolos={L:"🏆",E:"🤝",V:"⚽"};
+let resultados=Array(9).fill("");
+
+function mostrarPartidos(){
+ const cont=document.getElementById("partidos");
+ cont.innerHTML="";
+
+ encuentros.forEach((p,i)=>{
+  cont.innerHTML+=`
+  <div class="partido">
+   <div class="numero">PARTIDO ${i+1}</div>
+   <div class="equipos">${p[0]}<br>VS<br>${p[1]}</div>
+   <div class="opciones">
+    <button id="l${i}" onclick="seleccionar(${i},'L')">🏆<br>L</button>
+    <button id="e${i}" onclick="seleccionar(${i},'E')">🤝<br>E</button>
+    <button id="v${i}" onclick="seleccionar(${i},'V')">⚽<br>V</button>
+   </div>
+  </div>`;
+ });
 }
+
+function seleccionar(i,op){
+ resultados[i]=op;
+
+ ["l","e","v"].forEach(x=>{
+  const b=document.getElementById(x+i);
+  b.className="";
+ });
+
+ const elegido=document.getElementById(op.toLowerCase()+i);
+ elegido.classList.add("seleccionado");
+
+ if(op==="L")elegido.classList.add("local");
+ if(op==="E")elegido.classList.add("empate");
+ if(op==="V")elegido.classList.add("visitante");
+
+ actualizarProgreso();
+}
+
+function actualizarProgreso(){
+ const n=resultados.filter(x=>x!=="").length;
+ document.getElementById("contador").innerText=
+ n+" de 9 partidos seleccionados";
+ document.getElementById("barra").style.width=
+ (n/9*100)+"%";
+}
+
+function limpiar(){
+ resultados=Array(9).fill("");
+ mostrarPartidos();
+ actualizarProgreso();
+}
+
+function aleatorio(){
+ encuentros.forEach((p,i)=>{
+  const opciones=["L","E","V"];
+  seleccionar(i,opciones[Math.floor(Math.random()*3)]);
+ });
+}
+
+function enviarWhatsApp(){
+ const nombre=document.getElementById("nombre").value.trim();
+
+ if(!nombre){
+  alert("Escribe tu nombre.");
+  return;
+ }
+
+ if(resultados.some(x=>x==="")){
+  alert("Selecciona los 9 partidos.");
+  return;
+ }
+
+ let mensaje="⚽ *QUINIELAS BAJÍO* ⚽\n";
+ mensaje+="🏆 JORNADA 17\n\n";
+ mensaje+="👤 Participante: "+nombre+"\n";
+ mensaje+="🎟️ Boleto: $15\n\n";
+ mensaje+="*MIS PRONÓSTICOS:*\n\n";
+
+ encuentros.forEach((p,i)=>{
+  mensaje+=(i+1)+". "+p[0]+" vs "+p[1]+"\n";
+  mensaje+="Resultado: "+simbolos[resultados[i]]+
+  " "+resultados[i]+"\n\n";
+ });
+
+ mensaje+="📲 Enviado desde Quinielas Bajío";
+
+ const url="https://wa.me/"+telefono+
+ "?text="+encodeURIComponent(mensaje);
+
+ window.location.href=url;
+}
+
+mostrarPartidos();
 </script>
 </body>
 </html>
